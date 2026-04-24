@@ -1,8 +1,8 @@
 # 🧊 L3DC - Little 3D Community
 
-**Little 3D Community (L3DC)** é um projeto desenvolvido como parte da disciplina de Dispositivos Móveis da **Fatec Indaiatuba**. O objetivo é criar uma plataforma dedicada à comunidade maker, funcionando como um blog e vitrine para a postagem de produtos e projetos desenvolvidos através de impressão 3D.
+**Little 3D Community (L3DC)** é um projeto desenvolvido como parte da disciplina de Dispositivos Móveis da **Fatec Indaiatuba**. O objetivo é criar uma plataforma dedicada à impressão, funcionando como uma pequena vitrine para a postagem de produtos e projetos desenvolvidos através de impressão 3D.
 
-O aplicativo permite que entusiastas documentem suas criações, compartilhem configurações de impressão e exibam o resultado final de peças modeladas ou baixadas da comunidade.
+O aplicativo permite documentar suas criações, armazenar links e descrição dos modelos. No momento ele não permite compartilhamento, somente o acesso pela aplicação.
 
 ## 🚀 Tecnologias
 
