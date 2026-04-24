@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Alert, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, StyleSheet, Linking } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
 import { Post } from '../types/post';
+import { styles } from '../styles/PostItemStyles';
 
 interface PostItemProps {
     post: Post;
@@ -21,7 +22,7 @@ export function PostItem({ post, onDelete }: PostItemProps) {
     const router = useRouter();
 
     const handleEdit = () => {
-        router.push(`/edit/${post.id}`);
+        router.push(`/form?id=${post.id}`);
     }
 
     const handleDelete = () => {
@@ -40,6 +41,28 @@ export function PostItem({ post, onDelete }: PostItemProps) {
             },
         ],
         );
+    };
+
+    const handleOpenLink = async () => {
+        if (!post.model3dUrl) return;
+
+        let url = post.model3dUrl.trim();
+        
+        // Garante que a URL tenha o protocolo para o celular entender que é um site
+        if (!url.startsWith('http://') && !url.startsWith('https://')) {
+            url = `https://${url}`;
+        }
+
+        try {
+            const supported = await Linking.canOpenURL(url);
+            if (supported) {
+                await Linking.openURL(url);
+            } else {
+                Alert.alert("Erro", "O celular não encontrou um navegador para abrir este link.");
+            }
+        } catch (error) {
+            Alert.alert("Erro", "Falha ao tentar abrir o link.");
+        }
     };
 
     return(
@@ -81,12 +104,16 @@ export function PostItem({ post, onDelete }: PostItemProps) {
                 <View style={styles.tagsFooter}>
                     
                     {post.model3dUrl && (
-                        <View style={styles.tagLink}>
+                        <TouchableOpacity 
+                            style={styles.tagLink} 
+                            onPress={handleOpenLink}
+                            activeOpacity={0.6}
+                        >
                             <Feather name="link" size={12} color="#57534e" />
                             <Text style={styles.tagLinkText} numberOfLines={1}>
-                                Modelo 3D
+                                Abrir Modelo 3D
                             </Text>
-                        </View>
+                        </TouchableOpacity>
                     )}
                     
                     {post.material && (
@@ -103,98 +130,3 @@ export function PostItem({ post, onDelete }: PostItemProps) {
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    card: {
-        backgroundColor: '#FCFBF8', // Um tom levemente off-white/terroso para dar um ar mais orgânico
-        padding: 20,
-        borderRadius: 16,
-        marginBottom: 16,
-        borderWidth: 1,
-        borderColor: '#E7E5E4',
-        // Sombra suave para iOS
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.05,
-        shadowRadius: 8,
-        // Sombra suave para Android
-        elevation: 2,
-    },
-    header: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
-        marginBottom: 12,
-    },
-    headerTextContainer: {
-        flex: 1,
-        paddingRight: 16,
-    },
-    title: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: '#292524',
-        marginBottom: 4,
-    },
-    date: {
-        fontSize: 12,
-        fontWeight: '500',
-        color: '#78716C',
-    },
-    actionsContainer: {
-        flexDirection: 'row',
-        gap: 8,
-    },
-    iconButtonEdit: {
-        backgroundColor: '#FFEDD5',
-        padding: 8,
-        borderRadius: 20,
-    },
-    iconButtonDelete: {
-        backgroundColor: '#FFE4E6',
-        padding: 8,
-        borderRadius: 20,
-    },
-    description: {
-        fontSize: 14,
-        color: '#57534E',
-        lineHeight: 22,
-        marginBottom: 16,
-    },
-    tagsFooter: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        gap: 8,
-        paddingTop: 16,
-        borderTopWidth: 1,
-        borderTopColor: '#F5F5F4',
-    },
-    tagLink: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: '#F5F5F4',
-        paddingHorizontal: 12,
-        paddingVertical: 6,
-        borderRadius: 16,
-    },
-    tagLinkText: {
-        fontSize: 12,
-        fontWeight: '600',
-        color: '#44403C',
-        marginLeft: 6,
-    },
-    tagMaterial: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: '#ECFDF5',
-        paddingHorizontal: 12,
-        paddingVertical: 6,
-        borderRadius: 16,
-    },
-    tagMaterialText: {
-        fontSize: 12,
-        fontWeight: '600',
-        color: '#047857',
-        marginLeft: 6,
-    },
-});

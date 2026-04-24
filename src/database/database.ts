@@ -19,6 +19,7 @@ async function runMigrations(db: SQLite.SQLiteDatabase): Promise<void> {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT NOT NULL,
             content TEXT NOT NULL,
+            material TEXT NOT NULL,
             model3dUrl TEXT NOT NULL,
             createdAt TEXT NOT NULL
         );
